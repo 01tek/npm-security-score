@@ -169,23 +169,23 @@ Provide developers with a quantifiable, transparent security score (0–100) for
   - [x] Unit and integration tests
 
 #### Task 2.4: Code Obfuscation Detection
-- [ ] **2.4.1** File analysis system
-  - [ ] Detect minified files
-  - [ ] Calculate file entropy
-  - [ ] Identify obfuscation patterns
-  - [ ] Size-based detection
-- [ ] **2.4.2** Suspicious file detection
-  - [ ] Flag large minified files (>5MB)
-  - [ ] Detect sudden size increases
-  - [ ] Identify unusual file patterns
-- [ ] **2.4.3** Risk scoring
-  - [ ] Calculate obfuscation risk
-  - [ ] Apply weight (-10 points)
-  - [ ] Generate detailed report
-- [ ] **2.4.4** Testing
-  - [ ] Test with various file types
-  - [ ] Test false positive scenarios
-  - [ ] Performance testing
+- [x] **2.4.1** File analysis system
+  - [x] Detect minified files
+  - [x] Calculate file entropy
+  - [x] Identify obfuscation patterns
+  - [x] Size-based detection
+- [x] **2.4.2** Suspicious file detection
+  - [x] Flag large minified files (>5MB)
+  - [x] Detect sudden size increases (structure in place)
+  - [x] Identify unusual file patterns
+- [x] **2.4.3** Risk scoring
+  - [x] Calculate obfuscation risk
+  - [x] Apply weight (-10 points)
+  - [x] Generate detailed report
+- [x] **2.4.4** Testing
+  - [x] Test with various file types
+  - [x] Test false positive scenarios
+  - [x] Performance testing
 
 #### Task 2.5: Advisory History Analysis
 - [ ] **2.5.1** Advisory database integration

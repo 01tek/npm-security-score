@@ -12,6 +12,7 @@ const { getScoreBand, shouldBlock, getScoreInterpretation } = require('./core/sc
 const LifecycleScriptRiskRule = require('./rules/LifecycleScriptRiskRule');
 const ExternalNetworkCallRule = require('./rules/ExternalNetworkCallRule');
 const MaintainerSecurityRule = require('./rules/MaintainerSecurityRule');
+const CodeObfuscationRule = require('./rules/CodeObfuscationRule');
 const NpmRegistryClient = require('./api/NpmRegistryClient');
 const GitHubClient = require('./api/GitHubClient');
 const PackageAnalyzer = require('./utils/packageAnalyzer');
@@ -39,6 +40,7 @@ module.exports = {
   LifecycleScriptRiskRule,
   ExternalNetworkCallRule,
   MaintainerSecurityRule,
+  CodeObfuscationRule,
   // Version
   version: require('../package.json').version,
 };
