@@ -41,6 +41,8 @@
     "npm": ">=9.0.0"
   },
   "devDependencies": {
+    "@babel/parser": "^7.28.5",
+    "@babel/traverse": "^7.28.5",
     "@commitlint/cli": "^20.1.0",
     "@commitlint/config-conventional": "^20.0.0",
     "eslint": "^8.57.1",

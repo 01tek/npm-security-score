@@ -121,27 +121,27 @@ Provide developers with a quantifiable, transparent security score (0–100) for
   - [x] Test edge cases
 
 #### Task 2.2: External Network Call Detection
-- [ ] **2.2.1** Static code analysis setup
-  - [ ] Integrate AST parser (Babel, Acorn, etc.)
-  - [ ] Create code traversal system
-  - [ ] Implement pattern matching for network calls
-- [ ] **2.2.2** Network call detection patterns
-  - [ ] Detect fetch/axios/http calls
-  - [ ] Detect require('http') usage
-  - [ ] Detect dynamic imports from URLs
-  - [ ] Detect eval() with network content
-- [ ] **2.2.3** Install-time network detection
-  - [ ] Detect network calls in lifecycle scripts
-  - [ ] Flag downloads during install
-  - [ ] Detect remote code execution
-- [ ] **2.2.4** Risk scoring and reporting
-  - [ ] Calculate network call risk
-  - [ ] Apply weight (-20 points)
-  - [ ] Generate detailed findings
-- [ ] **2.2.5** Comprehensive testing
-  - [ ] Test various network call patterns
-  - [ ] Test false positives
-  - [ ] Performance testing
+- [x] **2.2.1** Static code analysis setup
+  - [x] Integrate AST parser (Babel, Acorn, etc.)
+  - [x] Create code traversal system
+  - [x] Implement pattern matching for network calls
+- [x] **2.2.2** Network call detection patterns
+  - [x] Detect fetch/axios/http calls
+  - [x] Detect require('http') usage
+  - [x] Detect dynamic imports from URLs
+  - [x] Detect eval() with network content
+- [x] **2.2.3** Install-time network detection
+  - [x] Detect network calls in lifecycle scripts
+  - [x] Flag downloads during install
+  - [x] Detect remote code execution
+- [x] **2.2.4** Risk scoring and reporting
+  - [x] Calculate network call risk
+  - [x] Apply weight (-20 points)
+  - [x] Generate detailed findings
+- [x] **2.2.5** Comprehensive testing
+  - [x] Test various network call patterns
+  - [x] Test false positives
+  - [x] Performance testing
 
 #### Task 2.3: Maintainer Security Checks
 - [ ] **2.3.1** GitHub API integration

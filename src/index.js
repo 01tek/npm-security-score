@@ -10,6 +10,7 @@ const { getScoreBand, shouldBlock, getScoreInterpretation } = require('./core/sc
 
 // Security Rules
 const LifecycleScriptRiskRule = require('./rules/LifecycleScriptRiskRule');
+const ExternalNetworkCallRule = require('./rules/ExternalNetworkCallRule');
 const NpmRegistryClient = require('./api/NpmRegistryClient');
 const PackageAnalyzer = require('./utils/packageAnalyzer');
 const TarballAnalyzer = require('./utils/tarballAnalyzer');
@@ -33,6 +34,7 @@ module.exports = {
   config,
   // Security Rules
   LifecycleScriptRiskRule,
+  ExternalNetworkCallRule,
   // Version
   version: require('../package.json').version,
 };
