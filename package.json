@@ -1,0 +1,48 @@
+{
+  "name": "npm-security-score",
+  "version": "0.1.0",
+  "description": "World-class security scoring system for npm packages",
+  "main": "src/index.js",
+  "bin": {
+    "npm-security-score": "./bin/cli.js"
+  },
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "lint": "eslint src/**/*.js",
+    "lint:fix": "eslint src/**/*.js --fix",
+    "build": "echo 'Build script to be implemented'",
+    "build:watch": "echo 'Watch build script to be implemented'"
+  },
+  "keywords": [
+    "npm",
+    "security",
+    "score",
+    "supply-chain",
+    "malware-detection",
+    "package-security",
+    "npm-audit",
+    "security-scoring"
+  ],
+  "author": "",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-org/npm-security-score.git"
+  },
+  "bugs": {
+    "url": "https://github.com/your-org/npm-security-score/issues"
+  },
+  "homepage": "https://github.com/your-org/npm-security-score#readme",
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
+  "devDependencies": {
+    "jest": "^29.0.0",
+    "eslint": "^8.0.0"
+  },
+  "dependencies": {}
+}
+
