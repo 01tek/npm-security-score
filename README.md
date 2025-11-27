@@ -59,22 +59,43 @@ Each package starts at 100 points. Points are deducted for risk factors:
 
 ## 🏗️ Project Status
 
-This project is in active development. See [plan.md](plan.md) for the complete roadmap.
+This project is in active development. **See [plan.md](plan.md) for the complete detailed roadmap with all tasks and subtasks.**
 
-**Current Phase:** Foundation & Core Infrastructure
+**Current Phase:** Phase 1 - Foundation & Core Infrastructure (90% complete)
+
+### 📋 Complete Project Plan
+
+**The project plan is the single source of truth for all development tasks.** It contains:
+- **8 Phases** with detailed breakdowns
+- **50+ Tasks** with actionable subtasks
+- **Clear milestones** and deliverables
+- **Open for contribution** - pick any task and start coding!
+
+👉 **[View Complete Plan →](plan.md)**
 
 ## 🤝 Contributing
 
 We welcome contributions! This project needs your help to establish world-class security standards.
 
-- Read [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines
-- Check [plan.md](plan.md) for tasks
-- Open issues for bugs or features
-- Submit pull requests
+### Quick Start for Contributors
 
-## 📋 Roadmap
+1. **Read the Plan**: Start with [plan.md](plan.md) - it contains all tasks organized by phase
+2. **Pick a Task**: Choose any uncompleted task from the plan
+3. **Read Guidelines**: Check [CONTRIBUTING.md](CONTRIBUTING.md) for development setup
+4. **Start Coding**: Create a branch and implement your task
+5. **Submit PR**: Follow the pull request process
 
-See [plan.md](plan.md) for the complete detailed plan with all tasks and subtasks.
+### Where to Contribute
+
+- **Phase 1 Tasks**: Complete remaining foundation work
+- **Phase 2 Tasks**: Implement security rules (lifecycle scripts, network calls, etc.)
+- **Phase 3 Tasks**: Build CLI tool
+- **Phase 4 Tasks**: CI/CD integrations
+- **Phase 5 Tasks**: Advanced features (caching, ML, etc.)
+- **Documentation**: Improve docs, add examples
+- **Testing**: Add tests, improve coverage
+
+**See [plan.md](plan.md) for the complete task list!**
 
 ### Upcoming Features
 

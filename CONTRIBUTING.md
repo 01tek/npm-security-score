@@ -110,13 +110,31 @@ npm run build:watch
 
 ### Contributing Code
 
-1. **Pick a task** from [plan.md](plan.md)
-2. **Create an issue** to discuss your approach (optional but recommended)
-3. **Create a branch** from `main`
-4. **Write code** following our standards
-5. **Write tests** for your changes
-6. **Ensure all tests pass**
-7. **Submit a pull request**
+**🎯 The [plan.md](plan.md) is your roadmap!** It contains all tasks organized by phase with detailed subtasks.
+
+1. **Read [plan.md](plan.md)** - Find tasks marked with `[ ]` (not started)
+2. **Pick a task** - Choose any task that interests you
+3. **Create an issue** - Comment on the task to claim it (optional but recommended)
+4. **Create a branch** from `main` - Use descriptive name like `feature/task-1-2-1`
+5. **Write code** following our standards
+6. **Write tests** for your changes (aim for >80% coverage)
+7. **Ensure all tests pass** - Run `npm test && npm run lint`
+8. **Update plan.md** - Mark your task as `[x]` completed
+9. **Submit a pull request** - Reference the task number in PR description
+
+### Finding Tasks to Work On
+
+The [plan.md](plan.md) file is organized into 8 phases:
+- **Phase 1**: Foundation & Core Infrastructure (mostly complete)
+- **Phase 2**: Security Rule Implementation (ready to start!)
+- **Phase 3**: CLI & User Interface
+- **Phase 4**: CI/CD Integration
+- **Phase 5**: Advanced Features
+- **Phase 6**: Testing & Quality Assurance
+- **Phase 7**: Documentation & Community
+- **Phase 8**: Publishing & Distribution
+
+Each task has a unique ID (e.g., `1.2.1`) and detailed subtasks. Look for `[ ]` to find uncompleted work!
 
 ### Areas Needing Contribution
 

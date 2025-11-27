@@ -3,9 +3,31 @@
  * World-class security scoring system for npm packages
  */
 
-// Main entry point - to be implemented
-module.exports = {
-  version: '0.1.0',
-  // TODO: Export main functionality
-};
+const ScoreCalculator = require('./core/ScoreCalculator');
+const RuleRegistry = require('./core/RuleRegistry');
+const BaseRule = require('./core/BaseRule');
+const { getScoreBand, shouldBlock, getScoreInterpretation } = require('./core/scoreBands');
+const NpmRegistryClient = require('./api/NpmRegistryClient');
+const PackageAnalyzer = require('./utils/packageAnalyzer');
+const TarballAnalyzer = require('./utils/tarballAnalyzer');
+const config = require('./utils/config');
 
+module.exports = {
+  // Core scoring
+  ScoreCalculator,
+  RuleRegistry,
+  BaseRule,
+  scoreBands: {
+    getScoreBand,
+    shouldBlock,
+    getScoreInterpretation,
+  },
+  // API clients
+  NpmRegistryClient,
+  // Utilities
+  PackageAnalyzer,
+  TarballAnalyzer,
+  config,
+  // Version
+  version: require('../package.json').version,
+};
