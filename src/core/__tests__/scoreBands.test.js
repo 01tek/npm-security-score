@@ -1,8 +1,4 @@
-const {
-  getScoreBand,
-  shouldBlock,
-  getScoreInterpretation,
-} = require('../scoreBands');
+const { getScoreBand, shouldBlock, getScoreInterpretation } = require('../scoreBands');
 
 describe('scoreBands', () => {
   describe('getScoreBand', () => {
@@ -76,4 +72,3 @@ describe('scoreBands', () => {
     });
   });
 });
-

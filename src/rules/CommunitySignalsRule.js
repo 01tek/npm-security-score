@@ -120,7 +120,9 @@ class CommunitySignalsRule extends BaseRule {
   async _checkRepositoryActivity(owner, repo) {
     const findings = [];
     const now = new Date();
-    const threeMonthsAgo = new Date(now.getTime() - this.lowActivityThresholdDays * 24 * 60 * 60 * 1000);
+    const threeMonthsAgo = new Date(
+      now.getTime() - this.lowActivityThresholdDays * 24 * 60 * 60 * 1000
+    );
     const sixMonthsAgo = new Date(now.getTime() - this.inactiveThresholdDays * 24 * 60 * 60 * 1000);
 
     // Check commit frequency
@@ -139,7 +141,7 @@ class CommunitySignalsRule extends BaseRule {
         });
       } else {
         // Check commit frequency
-        const recentCommits = commits.filter((commit) => {
+        const recentCommits = commits.filter(commit => {
           const commitDate = new Date(commit.commit.author.date);
           return commitDate >= threeMonthsAgo;
         });
@@ -187,12 +189,12 @@ class CommunitySignalsRule extends BaseRule {
       });
 
       // Filter to recent activity
-      const recentIssues = issues.filter((issue) => {
+      const recentIssues = issues.filter(issue => {
         const issueDate = new Date(issue.created_at);
         return issueDate >= threeMonthsAgo;
       });
 
-      const recentPRs = pullRequests.filter((pr) => {
+      const recentPRs = pullRequests.filter(pr => {
         const prDate = new Date(pr.created_at);
         return prDate >= threeMonthsAgo;
       });
@@ -206,7 +208,7 @@ class CommunitySignalsRule extends BaseRule {
       }
 
       // Check for open issues (indicates active maintenance)
-      const openIssues = issues.filter((issue) => issue.state === 'open' && !issue.pull_request);
+      const openIssues = issues.filter(issue => issue.state === 'open' && !issue.pull_request);
       if (openIssues.length > 50) {
         findings.push({
           type: 'many-open-issues',
@@ -245,7 +247,11 @@ class CommunitySignalsRule extends BaseRule {
     } else {
       // Try to read and analyze SECURITY.md content
       try {
-        const securityPolicy = await this.githubClient.getRepositoryContents(owner, repo, 'SECURITY.md');
+        const securityPolicy = await this.githubClient.getRepositoryContents(
+          owner,
+          repo,
+          'SECURITY.md'
+        );
         if (securityPolicy && securityPolicy.content) {
           // GitHub API returns content as base64-encoded string
           let content = null;
@@ -259,14 +265,15 @@ class CommunitySignalsRule extends BaseRule {
               content = securityPolicy.content;
             }
           }
-          
+
           if (content && content.trim().length > 0) {
             const hasResponsibleDisclosure = this._checkResponsibleDisclosure(content);
-            
+
             if (!hasResponsibleDisclosure) {
               findings.push({
                 type: 'no-responsible-disclosure',
-                description: 'SECURITY.md exists but does not clearly describe responsible disclosure process',
+                description:
+                  'SECURITY.md exists but does not clearly describe responsible disclosure process',
                 severity: 'low',
               });
             }
@@ -299,7 +306,7 @@ class CommunitySignalsRule extends BaseRule {
       'coordinated disclosure',
     ];
 
-    return keywords.some((keyword) => lowerContent.includes(keyword));
+    return keywords.some(keyword => lowerContent.includes(keyword));
   }
 
   /**
@@ -399,4 +406,3 @@ class CommunitySignalsRule extends BaseRule {
 }
 
 module.exports = CommunitySignalsRule;
-

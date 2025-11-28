@@ -30,16 +30,12 @@ class ScoringService {
 
     // Register all enabled rules
     if (this.config.rules?.lifecycleScriptRisk?.enabled) {
-      const rule = new LifecycleScriptRiskRule(
-        this.config.rules.lifecycleScriptRisk.weight
-      );
+      const rule = new LifecycleScriptRiskRule(this.config.rules.lifecycleScriptRisk.weight);
       calculator.registerRule(rule);
     }
 
     if (this.config.rules?.externalNetworkCalls?.enabled) {
-      const rule = new ExternalNetworkCallRule(
-        this.config.rules.externalNetworkCalls.weight
-      );
+      const rule = new ExternalNetworkCallRule(this.config.rules.externalNetworkCalls.weight);
       calculator.registerRule(rule);
     }
 
@@ -74,10 +70,7 @@ class ScoringService {
     }
 
     // Fetch package metadata
-    const packageMetadata = await this.registryClient.getPackageMetadata(
-      packageName,
-      version
-    );
+    const packageMetadata = await this.registryClient.getPackageMetadata(packageName, version);
 
     if (this.verbose) {
       console.log(`✅ Fetched metadata for ${packageMetadata.name}@${packageMetadata.version}`);
@@ -146,9 +139,8 @@ class ScoringService {
 
     for (let i = 0; i < packages.length; i++) {
       const pkg = packages[i];
-      const [name, version] = pkg.includes('@') && !pkg.startsWith('@')
-        ? pkg.split('@')
-        : [pkg, null];
+      const [name, version] =
+        pkg.includes('@') && !pkg.startsWith('@') ? pkg.split('@') : [pkg, null];
 
       try {
         if (this.verbose) {
@@ -175,4 +167,3 @@ class ScoringService {
 }
 
 module.exports = ScoringService;
-

@@ -109,10 +109,10 @@ class NpmRegistryClient {
       const isHttps = url.startsWith('https');
       const client = isHttps ? https : http;
 
-      const request = client.get(url, (response) => {
+      const request = client.get(url, response => {
         let data = '';
 
-        response.on('data', (chunk) => {
+        response.on('data', chunk => {
           data += chunk;
         });
 
@@ -132,7 +132,7 @@ class NpmRegistryClient {
         });
       });
 
-      request.on('error', (error) => {
+      request.on('error', error => {
         reject(error);
       });
 
@@ -145,4 +145,3 @@ class NpmRegistryClient {
 }
 
 module.exports = NpmRegistryClient;
-

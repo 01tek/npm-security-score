@@ -7,7 +7,8 @@ const https = require('https');
 
 class AdvisoryClient {
   constructor(config = {}) {
-    this.npmAdvisoryUrl = config.npmAdvisoryUrl || 'https://registry.npmjs.org/-/npm/v1/security/advisories';
+    this.npmAdvisoryUrl =
+      config.npmAdvisoryUrl || 'https://registry.npmjs.org/-/npm/v1/security/advisories';
     this.githubAdvisoryUrl = config.githubAdvisoryUrl || 'https://api.github.com/advisories';
     this.timeout = config.timeout || 30000;
     this.cache = new Map();
@@ -78,7 +79,7 @@ class AdvisoryClient {
     try {
       const data = await this._fetch(url);
       if (Array.isArray(data)) {
-        return data.map((adv) => this._normalizeNpmAdvisory(adv, packageName, version));
+        return data.map(adv => this._normalizeNpmAdvisory(adv, packageName, version));
       }
       return [];
     } catch (error) {
@@ -102,7 +103,7 @@ class AdvisoryClient {
     try {
       const data = await this._fetch(url);
       if (data && Array.isArray(data)) {
-        return data.map((adv) => this._normalizeGitHubAdvisory(adv, packageName));
+        return data.map(adv => this._normalizeGitHubAdvisory(adv, packageName));
       }
       return [];
     } catch (error) {
@@ -177,10 +178,21 @@ class AdvisoryClient {
     if (normalized.includes('high') || normalized === '7' || normalized === '8') {
       return 'high';
     }
-    if (normalized.includes('moderate') || normalized.includes('medium') || normalized === '4' || normalized === '5' || normalized === '6') {
+    if (
+      normalized.includes('moderate') ||
+      normalized.includes('medium') ||
+      normalized === '4' ||
+      normalized === '5' ||
+      normalized === '6'
+    ) {
       return 'moderate';
     }
-    if (normalized.includes('low') || normalized === '1' || normalized === '2' || normalized === '3') {
+    if (
+      normalized.includes('low') ||
+      normalized === '1' ||
+      normalized === '2' ||
+      normalized === '3'
+    ) {
       return 'low';
     }
     return 'unknown';
@@ -211,10 +223,10 @@ class AdvisoryClient {
    */
   _fetch(url) {
     return new Promise((resolve, reject) => {
-      const request = https.get(url, (response) => {
+      const request = https.get(url, response => {
         let data = '';
 
-        response.on('data', (chunk) => {
+        response.on('data', chunk => {
           data += chunk;
         });
 
@@ -236,7 +248,7 @@ class AdvisoryClient {
         });
       });
 
-      request.on('error', (error) => {
+      request.on('error', error => {
         reject(error);
       });
 
@@ -266,4 +278,3 @@ class AdvisoryClient {
 }
 
 module.exports = AdvisoryClient;
-

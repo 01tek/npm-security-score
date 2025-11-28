@@ -130,4 +130,3 @@ class VerifiedPublisherRule extends BaseRule {
 }
 
 module.exports = VerifiedPublisherRule;
-

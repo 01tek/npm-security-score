@@ -78,7 +78,9 @@ describe('CommunitySignalsRule', () => {
       const result = await rule.evaluate(packageData);
       expect(result.deduction).toBeGreaterThan(0);
       expect(
-        result.details.findings.some((f) => f.type === 'inactive-repo' || f.type === 'no-recent-commits')
+        result.details.findings.some(
+          f => f.type === 'inactive-repo' || f.type === 'no-recent-commits'
+        )
       ).toBe(true);
     });
 
@@ -90,9 +92,7 @@ describe('CommunitySignalsRule', () => {
         pushed_at: recentDate,
         stargazers_count: 10,
       });
-      mockGitHubClient.getCommits.mockResolvedValue([
-        { commit: { author: { date: recentDate } } },
-      ]);
+      mockGitHubClient.getCommits.mockResolvedValue([{ commit: { author: { date: recentDate } } }]);
       mockGitHubClient.getIssues.mockResolvedValue([]);
       mockGitHubClient.getPullRequests.mockResolvedValue([]);
       mockGitHubClient.hasSecurityPolicy.mockResolvedValue(false);
@@ -104,9 +104,7 @@ describe('CommunitySignalsRule', () => {
       };
 
       const result = await rule.evaluate(packageData);
-      expect(
-        result.details.findings.some((f) => f.type === 'no-security-policy')
-      ).toBe(true);
+      expect(result.details.findings.some(f => f.type === 'no-security-policy')).toBe(true);
     });
 
     it('should not penalize if security policy exists', async () => {
@@ -117,9 +115,7 @@ describe('CommunitySignalsRule', () => {
         pushed_at: recentDate,
         stargazers_count: 10,
       });
-      mockGitHubClient.getCommits.mockResolvedValue([
-        { commit: { author: { date: recentDate } } },
-      ]);
+      mockGitHubClient.getCommits.mockResolvedValue([{ commit: { author: { date: recentDate } } }]);
       mockGitHubClient.getIssues.mockResolvedValue([]);
       mockGitHubClient.getPullRequests.mockResolvedValue([]);
       mockGitHubClient.hasSecurityPolicy.mockResolvedValue(true);
@@ -131,9 +127,7 @@ describe('CommunitySignalsRule', () => {
       };
 
       const result = await rule.evaluate(packageData);
-      expect(
-        result.details.findings.some((f) => f.type === 'no-security-policy')
-      ).toBe(false);
+      expect(result.details.findings.some(f => f.type === 'no-security-policy')).toBe(false);
     });
 
     it('should detect archived repository', async () => {
@@ -144,9 +138,7 @@ describe('CommunitySignalsRule', () => {
         pushed_at: recentDate,
         stargazers_count: 10,
       });
-      mockGitHubClient.getCommits.mockResolvedValue([
-        { commit: { author: { date: recentDate } } },
-      ]);
+      mockGitHubClient.getCommits.mockResolvedValue([{ commit: { author: { date: recentDate } } }]);
       mockGitHubClient.getIssues.mockResolvedValue([]);
       mockGitHubClient.getPullRequests.mockResolvedValue([]);
       mockGitHubClient.hasSecurityPolicy.mockResolvedValue(true);
@@ -158,9 +150,7 @@ describe('CommunitySignalsRule', () => {
       };
 
       const result = await rule.evaluate(packageData);
-      expect(
-        result.details.findings.some((f) => f.type === 'archived-repo')
-      ).toBe(true);
+      expect(result.details.findings.some(f => f.type === 'archived-repo')).toBe(true);
     });
 
     it('should detect low commit activity', async () => {
@@ -189,7 +179,7 @@ describe('CommunitySignalsRule', () => {
       const result = await rule.evaluate(packageData);
       expect(
         result.details.findings.some(
-          (f) => f.type === 'low-commit-activity' || f.type === 'low-activity-repo'
+          f => f.type === 'low-commit-activity' || f.type === 'low-activity-repo'
         )
       ).toBe(true);
     });
@@ -202,9 +192,7 @@ describe('CommunitySignalsRule', () => {
         pushed_at: recentDate,
         stargazers_count: 10,
       });
-      mockGitHubClient.getCommits.mockResolvedValue([
-        { commit: { author: { date: recentDate } } },
-      ]);
+      mockGitHubClient.getCommits.mockResolvedValue([{ commit: { author: { date: recentDate } } }]);
       mockGitHubClient.getIssues.mockResolvedValue([]);
       mockGitHubClient.getPullRequests.mockResolvedValue([]);
       mockGitHubClient.hasSecurityPolicy.mockResolvedValue(true);
@@ -216,14 +204,15 @@ describe('CommunitySignalsRule', () => {
       };
 
       const result = await rule.evaluate(packageData);
-      expect(
-        result.details.findings.some((f) => f.type === 'no-recent-community-activity')
-      ).toBe(true);
+      expect(result.details.findings.some(f => f.type === 'no-recent-community-activity')).toBe(
+        true
+      );
     });
 
     it('should detect missing responsible disclosure in security policy', async () => {
       const recentDate = new Date().toISOString();
-      const testContent = 'This is a general security policy document. Please contact us for security concerns.';
+      const testContent =
+        'This is a general security policy document. Please contact us for security concerns.';
       const base64Content = Buffer.from(testContent).toString('base64');
 
       mockGitHubClient.getRepository.mockResolvedValue({
@@ -232,9 +221,7 @@ describe('CommunitySignalsRule', () => {
         pushed_at: recentDate,
         stargazers_count: 10,
       });
-      mockGitHubClient.getCommits.mockResolvedValue([
-        { commit: { author: { date: recentDate } } },
-      ]);
+      mockGitHubClient.getCommits.mockResolvedValue([{ commit: { author: { date: recentDate } } }]);
       mockGitHubClient.getIssues.mockResolvedValue([]);
       mockGitHubClient.getPullRequests.mockResolvedValue([]);
       mockGitHubClient.hasSecurityPolicy.mockResolvedValue(true);
@@ -252,17 +239,15 @@ describe('CommunitySignalsRule', () => {
       };
 
       const result = await rule.evaluate(packageData);
-      
+
       // Verify getRepositoryContents was called
       expect(mockGitHubClient.getRepositoryContents).toHaveBeenCalledWith(
         'test-owner',
         'test-repo',
         'SECURITY.md'
       );
-      
-      expect(
-        result.details.findings.some((f) => f.type === 'no-responsible-disclosure')
-      ).toBe(true);
+
+      expect(result.details.findings.some(f => f.type === 'no-responsible-disclosure')).toBe(true);
     });
 
     it('should not flag security policy with responsible disclosure', async () => {
@@ -273,14 +258,14 @@ describe('CommunitySignalsRule', () => {
         pushed_at: recentDate,
         stargazers_count: 10,
       });
-      mockGitHubClient.getCommits.mockResolvedValue([
-        { commit: { author: { date: recentDate } } },
-      ]);
+      mockGitHubClient.getCommits.mockResolvedValue([{ commit: { author: { date: recentDate } } }]);
       mockGitHubClient.getIssues.mockResolvedValue([]);
       mockGitHubClient.getPullRequests.mockResolvedValue([]);
       mockGitHubClient.hasSecurityPolicy.mockResolvedValue(true);
       mockGitHubClient.getRepositoryContents.mockResolvedValue({
-        content: Buffer.from('Please report security issues to security@example.com via responsible disclosure').toString('base64'),
+        content: Buffer.from(
+          'Please report security issues to security@example.com via responsible disclosure'
+        ).toString('base64'),
       });
 
       const packageData = {
@@ -290,9 +275,7 @@ describe('CommunitySignalsRule', () => {
       };
 
       const result = await rule.evaluate(packageData);
-      expect(
-        result.details.findings.some((f) => f.type === 'no-responsible-disclosure')
-      ).toBe(false);
+      expect(result.details.findings.some(f => f.type === 'no-responsible-disclosure')).toBe(false);
     });
 
     it('should extract repository from string URL', async () => {
@@ -303,9 +286,7 @@ describe('CommunitySignalsRule', () => {
         pushed_at: recentDate,
         stargazers_count: 10,
       });
-      mockGitHubClient.getCommits.mockResolvedValue([
-        { commit: { author: { date: recentDate } } },
-      ]);
+      mockGitHubClient.getCommits.mockResolvedValue([{ commit: { author: { date: recentDate } } }]);
       mockGitHubClient.getIssues.mockResolvedValue([]);
       mockGitHubClient.getPullRequests.mockResolvedValue([]);
       mockGitHubClient.hasSecurityPolicy.mockResolvedValue(true);
@@ -327,9 +308,7 @@ describe('CommunitySignalsRule', () => {
         pushed_at: recentDate,
         stargazers_count: 10,
       });
-      mockGitHubClient.getCommits.mockResolvedValue([
-        { commit: { author: { date: recentDate } } },
-      ]);
+      mockGitHubClient.getCommits.mockResolvedValue([{ commit: { author: { date: recentDate } } }]);
       mockGitHubClient.getIssues.mockResolvedValue([]);
       mockGitHubClient.getPullRequests.mockResolvedValue([]);
       mockGitHubClient.hasSecurityPolicy.mockResolvedValue(true);
@@ -380,9 +359,7 @@ describe('CommunitySignalsRule', () => {
         pushed_at: recentDate,
         stargazers_count: 2, // Very few stars
       });
-      mockGitHubClient.getCommits.mockResolvedValue([
-        { commit: { author: { date: recentDate } } },
-      ]);
+      mockGitHubClient.getCommits.mockResolvedValue([{ commit: { author: { date: recentDate } } }]);
       mockGitHubClient.getIssues.mockResolvedValue([]);
       mockGitHubClient.getPullRequests.mockResolvedValue([]);
       mockGitHubClient.hasSecurityPolicy.mockResolvedValue(true);
@@ -394,9 +371,7 @@ describe('CommunitySignalsRule', () => {
       };
 
       const result = await rule.evaluate(packageData);
-      expect(
-        result.details.findings.some((f) => f.type === 'low-community-engagement')
-      ).toBe(true);
+      expect(result.details.findings.some(f => f.type === 'low-community-engagement')).toBe(true);
     });
 
     it('should detect many open issues', async () => {
@@ -413,9 +388,7 @@ describe('CommunitySignalsRule', () => {
         pushed_at: recentDate,
         stargazers_count: 10,
       });
-      mockGitHubClient.getCommits.mockResolvedValue([
-        { commit: { author: { date: recentDate } } },
-      ]);
+      mockGitHubClient.getCommits.mockResolvedValue([{ commit: { author: { date: recentDate } } }]);
       mockGitHubClient.getIssues.mockResolvedValue(manyIssues);
       mockGitHubClient.getPullRequests.mockResolvedValue([]);
       mockGitHubClient.hasSecurityPolicy.mockResolvedValue(true);
@@ -427,9 +400,7 @@ describe('CommunitySignalsRule', () => {
       };
 
       const result = await rule.evaluate(packageData);
-      expect(
-        result.details.findings.some((f) => f.type === 'many-open-issues')
-      ).toBe(true);
+      expect(result.details.findings.some(f => f.type === 'many-open-issues')).toBe(true);
     });
   });
 
@@ -474,7 +445,8 @@ describe('CommunitySignalsRule', () => {
 
   describe('_checkResponsibleDisclosure', () => {
     it('should detect responsible disclosure keywords', () => {
-      const content = 'Please report security issues via responsible disclosure to security@example.com';
+      const content =
+        'Please report security issues via responsible disclosure to security@example.com';
       expect(rule._checkResponsibleDisclosure(content)).toBe(true);
     });
 
@@ -499,4 +471,3 @@ describe('CommunitySignalsRule', () => {
     });
   });
 });
-

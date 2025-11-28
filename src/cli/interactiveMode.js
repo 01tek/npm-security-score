@@ -72,8 +72,7 @@ class InteractiveMode {
 
       if (!shouldContinue) {
         console.log('\n👋 Goodbye!\n');
-        shouldContinue = false;
-        break;
+        return;
       }
     }
   }
@@ -88,7 +87,7 @@ class InteractiveMode {
         type: 'input',
         name: 'packageInput',
         message: 'Enter package name (optionally with version, e.g., express@4.18.0):',
-        validate: (input) => {
+        validate: input => {
           if (!input || input.trim().length === 0) {
             return 'Package name is required';
           }
@@ -97,9 +96,10 @@ class InteractiveMode {
       },
     ]);
 
-    const [packageName, version] = packageInput.includes('@') && !packageInput.startsWith('@')
-      ? packageInput.split('@')
-      : [packageInput.trim(), null];
+    const [packageName, version] =
+      packageInput.includes('@') && !packageInput.startsWith('@')
+        ? packageInput.split('@')
+        : [packageInput.trim(), null];
 
     const spinner = ora(`Scoring ${packageName}${version ? `@${version}` : ''}...`).start();
 
@@ -163,20 +163,18 @@ class InteractiveMode {
         type: 'input',
         name: 'package1',
         message: 'Enter first package name:',
-        validate: (input) => input.trim().length > 0 || 'Package name is required',
+        validate: input => input.trim().length > 0 || 'Package name is required',
       },
       {
         type: 'input',
         name: 'package2',
         message: 'Enter second package name:',
-        validate: (input) => input.trim().length > 0 || 'Package name is required',
+        validate: input => input.trim().length > 0 || 'Package name is required',
       },
     ]);
 
-    const parsePackage = (pkg) => {
-      return pkg.includes('@') && !pkg.startsWith('@')
-        ? pkg.split('@')
-        : [pkg.trim(), null];
+    const parsePackage = pkg => {
+      return pkg.includes('@') && !pkg.startsWith('@') ? pkg.split('@') : [pkg.trim(), null];
     };
 
     const [name1, version1] = parsePackage(package1);
@@ -209,8 +207,11 @@ class InteractiveMode {
         type: 'input',
         name: 'packagesInput',
         message: 'Enter package names (comma-separated):',
-        validate: (input) => {
-          const packages = input.split(',').map((p) => p.trim()).filter((p) => p.length > 0);
+        validate: input => {
+          const packages = input
+            .split(',')
+            .map(p => p.trim())
+            .filter(p => p.length > 0);
           if (packages.length === 0) {
             return 'At least one package is required';
           }
@@ -221,8 +222,8 @@ class InteractiveMode {
 
     const packages = packagesInput
       .split(',')
-      .map((p) => p.trim())
-      .filter((p) => p.length > 0);
+      .map(p => p.trim())
+      .filter(p => p.length > 0);
 
     const spinner = ora(`Scoring ${packages.length} package(s)...`).start();
 
@@ -239,4 +240,3 @@ class InteractiveMode {
 }
 
 module.exports = InteractiveMode;
-

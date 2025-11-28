@@ -58,9 +58,7 @@ describe('MaintainerSecurityRule', () => {
 
       const result = await rule.evaluate(packageData);
       expect(result.deduction).toBeGreaterThan(0);
-      expect(
-        result.details.findings.some((f) => f.type === 'no-security-policy')
-      ).toBe(true);
+      expect(result.details.findings.some(f => f.type === 'no-security-policy')).toBe(true);
     });
 
     it('should not penalize if security policy exists', async () => {
@@ -81,9 +79,7 @@ describe('MaintainerSecurityRule', () => {
       };
 
       const result = await rule.evaluate(packageData);
-      expect(
-        result.details.findings.some((f) => f.type === 'no-security-policy')
-      ).toBe(false);
+      expect(result.details.findings.some(f => f.type === 'no-security-policy')).toBe(false);
     });
 
     it('should detect archived repository', async () => {
@@ -101,9 +97,7 @@ describe('MaintainerSecurityRule', () => {
       };
 
       const result = await rule.evaluate(packageData);
-      expect(
-        result.details.findings.some((f) => f.type === 'archived-repo')
-      ).toBe(true);
+      expect(result.details.findings.some(f => f.type === 'archived-repo')).toBe(true);
     });
 
     it('should detect inactive repository', async () => {
@@ -124,9 +118,7 @@ describe('MaintainerSecurityRule', () => {
       };
 
       const result = await rule.evaluate(packageData);
-      expect(
-        result.details.findings.some((f) => f.type === 'inactive-repo')
-      ).toBe(true);
+      expect(result.details.findings.some(f => f.type === 'inactive-repo')).toBe(true);
     });
 
     it('should extract repository from string URL', async () => {
@@ -177,9 +169,7 @@ describe('MaintainerSecurityRule', () => {
     });
 
     it('should handle API errors gracefully', async () => {
-      mockGitHubClient.hasSecurityPolicy.mockRejectedValue(
-        new Error('API Error')
-      );
+      mockGitHubClient.hasSecurityPolicy.mockRejectedValue(new Error('API Error'));
       mockGitHubClient.getRepository.mockRejectedValue(new Error('API Error'));
 
       const packageData = {
@@ -236,10 +226,7 @@ describe('MaintainerSecurityRule', () => {
   describe('_extractMaintainers', () => {
     it('should extract from maintainers array', () => {
       const packageData = {
-        maintainers: [
-          { name: 'maintainer1', email: 'm1@example.com' },
-          { name: 'maintainer2' },
-        ],
+        maintainers: [{ name: 'maintainer1', email: 'm1@example.com' }, { name: 'maintainer2' }],
       };
 
       const maintainers = rule._extractMaintainers(packageData);
@@ -272,4 +259,3 @@ describe('MaintainerSecurityRule', () => {
     });
   });
 });
-

@@ -57,7 +57,12 @@ describe('OutputFormatter', () => {
       formatter = new OutputFormatter({ json: true });
       const resultWithBand = {
         ...mockResult,
-        band: { key: 'REVIEW', label: 'Review Recommended', description: 'Review recommended', emoji: '⚠️' },
+        band: {
+          key: 'REVIEW',
+          label: 'Review Recommended',
+          description: 'Review recommended',
+          emoji: '⚠️',
+        },
       };
       const output = formatter.formatResult(resultWithBand);
       expect(() => JSON.parse(output)).not.toThrow();
@@ -227,4 +232,3 @@ describe('OutputFormatter', () => {
     });
   });
 });
-

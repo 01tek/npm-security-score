@@ -129,7 +129,7 @@ describe('ExternalNetworkCallRule', () => {
       };
 
       const result = await rule.evaluate(packageData);
-      expect(result.details.findings.some((f) => f.source === 'dependencies')).toBe(true);
+      expect(result.details.findings.some(f => f.source === 'dependencies')).toBe(true);
     });
 
     it('should calculate full deduction for high risk', async () => {
@@ -214,7 +214,7 @@ describe('ExternalNetworkCallRule', () => {
     it('should detect eval with network content', async () => {
       const packageData = {
         scripts: {
-          postinstall: "eval(\"fetch('http://example.com')\")",
+          postinstall: 'eval("fetch(\'http://example.com\')")',
         },
       };
 
@@ -255,8 +255,7 @@ describe('ExternalNetworkCallRule', () => {
 
       const findings = rule._checkNetworkDependencies(dependencies);
       expect(findings.length).toBeGreaterThan(0);
-      expect(findings.some((f) => f.package === 'axios')).toBe(true);
+      expect(findings.some(f => f.package === 'axios')).toBe(true);
     });
   });
 });
-

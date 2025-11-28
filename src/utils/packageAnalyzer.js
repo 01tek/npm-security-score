@@ -146,4 +146,3 @@ class PackageAnalyzer {
 }
 
 module.exports = PackageAnalyzer;
-

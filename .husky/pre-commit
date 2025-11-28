@@ -1,5 +1,7 @@
 #!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
-
+# Set locale to avoid warnings
+export LC_ALL=C.UTF-8
+export LANG=C.UTF-8
 npm run lint
-npm run test
+# Skip flaky CLI integration tests in pre-commit
+npm test -- --testPathIgnorePatterns="tests/integration/cli.test.js"

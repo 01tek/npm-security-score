@@ -37,7 +37,7 @@ class GitHubClient {
           headers,
           timeout: this.timeout,
         },
-        (response) => {
+        response => {
           // Handle rate limiting
           const rateLimitRemaining = response.headers['x-ratelimit-remaining'];
           const rateLimitReset = response.headers['x-ratelimit-reset'];
@@ -51,7 +51,7 @@ class GitHubClient {
 
           let data = '';
 
-          response.on('data', (chunk) => {
+          response.on('data', chunk => {
             data += chunk;
           });
 
@@ -59,9 +59,7 @@ class GitHubClient {
             if (response.statusCode === 403 && this.rateLimitRemaining === 0) {
               const resetTime = new Date(this.rateLimitReset * 1000);
               reject(
-                new Error(
-                  `GitHub API rate limit exceeded. Resets at ${resetTime.toISOString()}`
-                )
+                new Error(`GitHub API rate limit exceeded. Resets at ${resetTime.toISOString()}`)
               );
               return;
             }
@@ -86,7 +84,7 @@ class GitHubClient {
         }
       );
 
-      request.on('error', (error) => {
+      request.on('error', error => {
         reject(error);
       });
 
@@ -324,4 +322,3 @@ class GitHubClient {
 }
 
 module.exports = GitHubClient;
-

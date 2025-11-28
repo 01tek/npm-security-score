@@ -99,10 +99,7 @@ describe('MarkdownFormatter', () => {
           emoji: '⚠️',
           label: 'Review Recommended',
         },
-        ruleResults: [
-          { deduction: 15 },
-          { deduction: 0 },
-        ],
+        ruleResults: [{ deduction: 15 }, { deduction: 0 }],
       };
 
       const summary = formatter._formatSummary(result);
@@ -125,4 +122,3 @@ describe('MarkdownFormatter', () => {
     });
   });
 });
-

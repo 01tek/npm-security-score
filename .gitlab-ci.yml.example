@@ -1,0 +1,32 @@
+# GitLab CI template for npm-security-score
+# Copy this to your .gitlab-ci.yml or include it
+
+stages:
+  - security
+
+security-score:
+  stage: security
+  image: node:20
+  before_script:
+    - npm ci
+  script:
+    - |
+      # Score all dependencies
+      npx npm-security-score batch $(cat package.json | jq -r '.dependencies // {}, .devDependencies // {} | keys[]' | tr '\n' ' ') --fail-below 70 --json > security-report.json
+    - |
+      # Check if any packages failed
+      if [ $? -ne 0 ]; then
+        echo "❌ Security check failed"
+        exit 1
+      fi
+  artifacts:
+    reports:
+      junit: security-report.json
+    paths:
+      - security-report.json
+    expire_in: 1 week
+  only:
+    - merge_requests
+    - main
+    - develop
+

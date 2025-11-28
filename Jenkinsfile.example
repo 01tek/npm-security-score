@@ -1,0 +1,102 @@
+// Jenkinsfile template for npm-security-score
+// Copy this to your Jenkinsfile or use as a pipeline library
+
+pipeline {
+    agent any
+    
+    environment {
+        NODE_VERSION = '20'
+        FAIL_BELOW = '70'
+    }
+    
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+        
+        stage('Setup Node.js') {
+            steps {
+                sh """
+                    nvm use ${NODE_VERSION} || true
+                    node --version
+                    npm --version
+                """
+            }
+        }
+        
+        stage('Install Dependencies') {
+            steps {
+                sh 'npm ci'
+            }
+        }
+        
+        stage('Security Score Check') {
+            steps {
+                script {
+                    // Get all dependencies from package.json
+                    def packageJson = readJSON file: 'package.json'
+                    def allDeps = []
+                    
+                    if (packageJson.dependencies) {
+                        allDeps.addAll(packageJson.dependencies.keySet())
+                    }
+                    if (packageJson.devDependencies) {
+                        allDeps.addAll(packageJson.devDependencies.keySet())
+                    }
+                    
+                    def packages = allDeps.join(' ')
+                    
+                    // Run security score check
+                    sh """
+                        npx npm-security-score batch ${packages} \\
+                            --fail-below ${FAIL_BELOW} \\
+                            --json \\
+                            --output security-report.json || true
+                    """
+                }
+            }
+        }
+        
+        stage('Publish Results') {
+            steps {
+                script {
+                    // Publish JSON report
+                    if (fileExists('security-report.json')) {
+                        publishHTML([
+                            reportName: 'Security Score Report',
+                            reportDir: '.',
+                            reportFiles: 'security-report.json',
+                            reportTitles: 'Security Score Report',
+                            keepAll: true
+                        ])
+                    }
+                    
+                    // Check if check passed
+                    def report = readJSON file: 'security-report.json'
+                    def failed = report.any { it.success && it.result.score < Integer.parseInt(FAIL_BELOW) }
+                    
+                    if (failed) {
+                        currentBuild.result = 'UNSTABLE'
+                        error('Security check failed: Some packages scored below threshold')
+                    }
+                }
+            }
+        }
+    }
+    
+    post {
+        always {
+            archiveArtifacts artifacts: 'security-report.json', allowEmptyArchive: true
+        }
+        failure {
+            emailext(
+                subject: "Security Check Failed: ${env.JOB_NAME} - ${env.BUILD_NUMBER}",
+                body: "Security score check failed. Please review the report.",
+                to: "${env.CHANGE_AUTHOR_EMAIL}"
+            )
+        }
+    }
+}
+

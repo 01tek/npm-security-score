@@ -34,9 +34,7 @@ describe('ScoreCalculator', () => {
 
   describe('calculateScore', () => {
     it('should throw error if packageData is missing', async () => {
-      await expect(calculator.calculateScore(null)).rejects.toThrow(
-        'Package data is required'
-      );
+      await expect(calculator.calculateScore(null)).rejects.toThrow('Package data is required');
     });
 
     it('should return base score when no rules are registered', async () => {
@@ -171,4 +169,3 @@ describe('ScoreCalculator', () => {
     });
   });
 });
-

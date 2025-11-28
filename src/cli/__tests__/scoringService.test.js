@@ -91,10 +91,7 @@ describe('ScoringService', () => {
 
       const result = await service.fetchPackageData('test-package');
 
-      expect(mockRegistryClient.getPackageMetadata).toHaveBeenCalledWith(
-        'test-package',
-        null
-      );
+      expect(mockRegistryClient.getPackageMetadata).toHaveBeenCalledWith('test-package', null);
       expect(result.name).toBe('test-package');
       expect(result.version).toBe('1.0.0');
     });
@@ -109,10 +106,7 @@ describe('ScoringService', () => {
 
       await service.fetchPackageData('test-package', '2.0.0');
 
-      expect(mockRegistryClient.getPackageMetadata).toHaveBeenCalledWith(
-        'test-package',
-        '2.0.0'
-      );
+      expect(mockRegistryClient.getPackageMetadata).toHaveBeenCalledWith('test-package', '2.0.0');
     });
 
     it('should handle tarball analysis errors gracefully', async () => {
@@ -123,9 +117,7 @@ describe('ScoringService', () => {
       };
 
       mockRegistryClient.getPackageMetadata.mockResolvedValue(mockMetadata);
-      mockTarballAnalyzer.analyzeTarball.mockRejectedValue(
-        new Error('Network error')
-      );
+      mockTarballAnalyzer.analyzeTarball.mockRejectedValue(new Error('Network error'));
 
       const result = await service.fetchPackageData('test-package');
 
@@ -154,13 +146,9 @@ describe('ScoringService', () => {
     });
 
     it('should handle scoring errors', async () => {
-      mockRegistryClient.getPackageMetadata.mockRejectedValue(
-        new Error('Package not found')
-      );
+      mockRegistryClient.getPackageMetadata.mockRejectedValue(new Error('Package not found'));
 
-      await expect(service.scorePackage('nonexistent')).rejects.toThrow(
-        'Package not found'
-      );
+      await expect(service.scorePackage('nonexistent')).rejects.toThrow('Package not found');
     });
   });
 
@@ -203,10 +191,7 @@ describe('ScoringService', () => {
 
       expect(results).toHaveLength(1);
       expect(results[0].success).toBe(true);
-      expect(mockRegistryClient.getPackageMetadata).toHaveBeenCalledWith(
-        'package1',
-        '2.0.0'
-      );
+      expect(mockRegistryClient.getPackageMetadata).toHaveBeenCalledWith('package1', '2.0.0');
     });
 
     it('should handle errors for individual packages', async () => {
@@ -229,4 +214,3 @@ describe('ScoringService', () => {
     });
   });
 });
-

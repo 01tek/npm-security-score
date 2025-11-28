@@ -102,7 +102,7 @@ class SBOMDetectionRule extends BaseRule {
         const tarballSBOMFiles = await this._analyzeTarball(tarballUrl, packageData.name);
         // Merge without duplicates
         for (const sbomFile of tarballSBOMFiles) {
-          if (!sbomFiles.some((f) => f.path === sbomFile.path)) {
+          if (!sbomFiles.some(f => f.path === sbomFile.path)) {
             sbomFiles.push(sbomFile);
           }
         }
@@ -153,7 +153,7 @@ class SBOMDetectionRule extends BaseRule {
     }
 
     // Check against SBOM patterns
-    return this.sbomPatterns.some((pattern) => pattern.test(fileName));
+    return this.sbomPatterns.some(pattern => pattern.test(fileName));
   }
 
   /**
@@ -183,4 +183,3 @@ class SBOMDetectionRule extends BaseRule {
 }
 
 module.exports = SBOMDetectionRule;
-

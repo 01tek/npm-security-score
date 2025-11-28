@@ -99,4 +99,3 @@ module.exports = {
   getScoreInterpretation,
   SCORE_BANDS,
 };
-

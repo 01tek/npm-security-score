@@ -84,4 +84,3 @@ class RuleRegistry {
 }
 
 module.exports = RuleRegistry;
-

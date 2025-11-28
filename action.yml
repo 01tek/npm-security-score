@@ -1,0 +1,49 @@
+name: 'npm-security-score'
+description: 'World-class security scoring system for npm packages'
+author: 'npm-security-score'
+branding:
+  icon: 'shield'
+  color: 'red'
+
+inputs:
+  package:
+    description: 'Package name to score (or path to package.json for dependency scanning)'
+    required: false
+    default: 'package.json'
+  fail-below:
+    description: 'Fail if score is below this threshold'
+    required: false
+    default: '70'
+  config:
+    description: 'Path to config file'
+    required: false
+  github-token:
+    description: 'GitHub token for PR comments (optional)'
+    required: false
+  comment-on-pr:
+    description: 'Comment on PR with results'
+    required: false
+    default: 'true'
+  json-output:
+    description: 'Output results as JSON'
+    required: false
+    default: 'false'
+  verbose:
+    description: 'Verbose output'
+    required: false
+    default: 'false'
+
+outputs:
+  score:
+    description: 'Security score (0-100)'
+  band:
+    description: 'Score band (SAFE, REVIEW, HIGH_RISK, BLOCK)'
+  passed:
+    description: 'Whether the check passed'
+  report:
+    description: 'Full JSON report'
+
+runs:
+  using: 'node20'
+  main: 'action/index.js'
+

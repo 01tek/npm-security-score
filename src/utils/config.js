@@ -153,7 +153,7 @@ class ConfigManager {
    * @private
    */
   setNestedProperty(obj, path, value) {
-    const keys = path.split(/(?=[A-Z])/).map((k) => k.toLowerCase());
+    const keys = path.split(/(?=[A-Z])/).map(k => k.toLowerCase());
     let current = obj;
 
     for (let i = 0; i < keys.length - 1; i++) {
@@ -269,4 +269,3 @@ configManager.loadFromEnv();
 module.exports = configManager;
 module.exports.ConfigManager = ConfigManager;
 module.exports.DEFAULT_CONFIG = DEFAULT_CONFIG;
-

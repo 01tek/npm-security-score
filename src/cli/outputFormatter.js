@@ -24,11 +24,17 @@ class OutputFormatter {
       return forceColors;
     }
     // Check if output is a TTY and not in CI
-    return (
-      process.stdout.isTTY &&
-      !process.env.CI &&
-      process.env.TERM !== 'dumb'
-    );
+    // CI detection: check for common CI environment variables
+    const isCI =
+      process.env.CI === 'true' ||
+      process.env.GITHUB_ACTIONS === 'true' ||
+      process.env.GITLAB_CI === 'true' ||
+      process.env.JENKINS_URL !== undefined ||
+      process.env.CIRCLECI === 'true' ||
+      process.env.TRAVIS === 'true' ||
+      process.env.CONTINUOUS_INTEGRATION === 'true';
+
+    return process.stdout.isTTY && !isCI && process.env.TERM !== 'dumb';
   }
 
   /**
@@ -104,7 +110,7 @@ class OutputFormatter {
     }
     // If it's an array, enrich each item
     if (Array.isArray(data)) {
-      const enriched = data.map((item) => {
+      const enriched = data.map(item => {
         if (item.result) {
           return {
             ...item,
@@ -154,7 +160,7 @@ class OutputFormatter {
    * @private
    */
   _formatRulesForJSON(ruleResults) {
-    return ruleResults.map((rule) => ({
+    return ruleResults.map(rule => ({
       name: rule.ruleName,
       deduction: rule.deduction,
       riskLevel: rule.riskLevel,
@@ -176,9 +182,7 @@ class OutputFormatter {
       (sum, rule) => sum + (Math.max(0, rule.deduction) || 0),
       0
     );
-    const issuesFound = (result.ruleResults || []).filter(
-      (rule) => rule.deduction > 0
-    ).length;
+    const issuesFound = (result.ruleResults || []).filter(rule => rule.deduction > 0).length;
 
     return {
       finalScore: result.score,
@@ -223,7 +227,7 @@ class OutputFormatter {
     }
 
     // Rule-specific recommendations
-    (result.ruleResults || []).forEach((rule) => {
+    (result.ruleResults || []).forEach(rule => {
       if (rule.deduction > 0) {
         const rec = this._getRuleRecommendation(rule);
         if (rec) {
@@ -244,7 +248,8 @@ class OutputFormatter {
       'lifecycle-script-risk': {
         priority: 'high',
         action: 'review',
-        message: 'Review lifecycle scripts for suspicious commands. Consider removing or replacing risky scripts.',
+        message:
+          'Review lifecycle scripts for suspicious commands. Consider removing or replacing risky scripts.',
         remediation: [
           'Review all preinstall/postinstall scripts',
           'Remove any scripts that download or execute remote code',
@@ -264,7 +269,8 @@ class OutputFormatter {
       'maintainer-security': {
         priority: 'medium',
         action: 'review',
-        message: 'Review maintainer security practices. Consider contacting maintainers about security improvements.',
+        message:
+          'Review maintainer security practices. Consider contacting maintainers about security improvements.',
         remediation: [
           'Check repository security policy',
           'Verify maintainer account security',
@@ -343,37 +349,23 @@ class OutputFormatter {
 
     // Header
     lines.push('');
-    lines.push(
-      `${c.bright}${c.cyan}${'='.repeat(60)}${c.reset}`
-    );
-    lines.push(
-      `${c.bright}Security Score Report${c.reset}`
-    );
-    lines.push(
-      `${c.cyan}${'='.repeat(60)}${c.reset}`
-    );
+    lines.push(`${c.bright}${c.cyan}${'='.repeat(60)}${c.reset}`);
+    lines.push(`${c.bright}Security Score Report${c.reset}`);
+    lines.push(`${c.cyan}${'='.repeat(60)}${c.reset}`);
     lines.push('');
 
     // Package info
-    lines.push(
-      `${c.bright}Package:${c.reset} ${result.packageName}@${result.packageVersion}`
-    );
-    lines.push(
-      `${c.bright}Timestamp:${c.reset} ${new Date(result.timestamp).toLocaleString()}`
-    );
+    lines.push(`${c.bright}Package:${c.reset} ${result.packageName}@${result.packageVersion}`);
+    lines.push(`${c.bright}Timestamp:${c.reset} ${new Date(result.timestamp).toLocaleString()}`);
     lines.push('');
 
     // Score
     const scoreColor = this.getScoreColor(result.score);
-    lines.push(
-      `${c.bright}Security Score:${c.reset} ${scoreColor}${result.score}/100${c.reset}`
-    );
+    lines.push(`${c.bright}Security Score:${c.reset} ${scoreColor}${result.score}/100${c.reset}`);
     lines.push(
       `${c.bright}Band:${c.reset} ${result.band.emoji} ${c.bright}${result.band.label}${c.reset}`
     );
-    lines.push(
-      `${c.dim}${result.band.description}${c.reset}`
-    );
+    lines.push(`${c.dim}${result.band.description}${c.reset}`);
     lines.push('');
 
     // Rule results
@@ -381,19 +373,12 @@ class OutputFormatter {
       lines.push(`${c.bright}Rule Results:${c.reset}`);
       lines.push('');
 
-      result.ruleResults.forEach((ruleResult) => {
+      result.ruleResults.forEach(ruleResult => {
         if (ruleResult.deduction > 0 || this.verbose) {
-          const deductionColor =
-            ruleResult.deduction > 0 ? c.red : c.green;
-          lines.push(
-            `  ${c.bright}${ruleResult.ruleName}${c.reset}`
-          );
-          lines.push(
-            `    Deduction: ${deductionColor}-${ruleResult.deduction} points${c.reset}`
-          );
-          lines.push(
-            `    Risk Level: ${this.formatRiskLevel(ruleResult.riskLevel)}`
-          );
+          const deductionColor = ruleResult.deduction > 0 ? c.red : c.green;
+          lines.push(`  ${c.bright}${ruleResult.ruleName}${c.reset}`);
+          lines.push(`    Deduction: ${deductionColor}-${ruleResult.deduction} points${c.reset}`);
+          lines.push(`    Risk Level: ${this.formatRiskLevel(ruleResult.riskLevel)}`);
 
           if (this.verbose && ruleResult.details) {
             const details = this.formatRuleDetails(ruleResult.details);
@@ -421,15 +406,9 @@ class OutputFormatter {
     const c = this.colors;
 
     lines.push('');
-    lines.push(
-      `${c.bright}${c.cyan}${'='.repeat(60)}${c.reset}`
-    );
-    lines.push(
-      `${c.bright}Batch Security Score Report${c.reset}`
-    );
-    lines.push(
-      `${c.cyan}${'='.repeat(60)}${c.reset}`
-    );
+    lines.push(`${c.bright}${c.cyan}${'='.repeat(60)}${c.reset}`);
+    lines.push(`${c.bright}Batch Security Score Report${c.reset}`);
+    lines.push(`${c.cyan}${'='.repeat(60)}${c.reset}`);
     lines.push('');
 
     results.forEach((item, index) => {
@@ -451,12 +430,11 @@ class OutputFormatter {
     });
 
     // Summary
-    const successful = results.filter((r) => r.success);
-    const failed = results.filter((r) => !r.success);
+    const successful = results.filter(r => r.success);
+    const failed = results.filter(r => !r.success);
     const avgScore =
       successful.length > 0
-        ? successful.reduce((sum, r) => sum + r.result.score, 0) /
-          successful.length
+        ? successful.reduce((sum, r) => sum + r.result.score, 0) / successful.length
         : 0;
 
     lines.push(`${c.bright}Summary:${c.reset}`);
@@ -517,13 +495,15 @@ class OutputFormatter {
     const lines = [];
 
     if (details.findings && Array.isArray(details.findings)) {
-      details.findings.forEach((finding) => {
+      details.findings.forEach(finding => {
         lines.push(`    ${c.yellow}⚠️  ${finding.hook || 'Finding'}:${c.reset}`);
         if (finding.script) {
-          lines.push(`       Script: ${c.dim}${finding.script.substring(0, 80)}${finding.script.length > 80 ? '...' : ''}${c.reset}`);
+          lines.push(
+            `       Script: ${c.dim}${finding.script.substring(0, 80)}${finding.script.length > 80 ? '...' : ''}${c.reset}`
+          );
         }
         if (finding.issues && Array.isArray(finding.issues)) {
-          finding.issues.forEach((issue) => {
+          finding.issues.forEach(issue => {
             lines.push(`       - ${issue.type}: ${issue.description}`);
           });
         }
@@ -546,10 +526,7 @@ class OutputFormatter {
         package2: result2,
         comparison: {
           scoreDifference: result1.score - result2.score,
-          recommendation:
-            result1.score > result2.score
-              ? result1.packageName
-              : result2.packageName,
+          recommendation: result1.score > result2.score ? result1.packageName : result2.packageName,
         },
       });
     }
@@ -558,22 +535,14 @@ class OutputFormatter {
     const lines = [];
 
     lines.push('');
-    lines.push(
-      `${c.bright}${c.cyan}${'='.repeat(60)}${c.reset}`
-    );
-    lines.push(
-      `${c.bright}Package Comparison${c.reset}`
-    );
-    lines.push(
-      `${c.cyan}${'='.repeat(60)}${c.reset}`
-    );
+    lines.push(`${c.bright}${c.cyan}${'='.repeat(60)}${c.reset}`);
+    lines.push(`${c.bright}Package Comparison${c.reset}`);
+    lines.push(`${c.cyan}${'='.repeat(60)}${c.reset}`);
     lines.push('');
 
     // Package 1
     const scoreColor1 = this.getScoreColor(result1.score);
-    lines.push(
-      `${c.bright}${result1.packageName}@${result1.packageVersion}${c.reset}`
-    );
+    lines.push(`${c.bright}${result1.packageName}@${result1.packageVersion}${c.reset}`);
     lines.push(
       `  Score: ${scoreColor1}${result1.score}/100${c.reset} | ${result1.band.emoji} ${result1.band.label}`
     );
@@ -581,9 +550,7 @@ class OutputFormatter {
 
     // Package 2
     const scoreColor2 = this.getScoreColor(result2.score);
-    lines.push(
-      `${c.bright}${result2.packageName}@${result2.packageVersion}${c.reset}`
-    );
+    lines.push(`${c.bright}${result2.packageName}@${result2.packageVersion}${c.reset}`);
     lines.push(
       `  Score: ${scoreColor2}${result2.score}/100${c.reset} | ${result2.band.emoji} ${result2.band.label}`
     );
@@ -599,9 +566,7 @@ class OutputFormatter {
     lines.push(
       `  Score Difference: ${diffColor}${diff > 0 ? '+' : ''}${diff.toFixed(2)}${c.reset}`
     );
-    lines.push(
-      `  Recommendation: ${c.bright}${recommendation}${c.reset} (higher security score)`
-    );
+    lines.push(`  Recommendation: ${c.bright}${recommendation}${c.reset} (higher security score)`);
     lines.push('');
 
     return lines.join('\n');
@@ -634,11 +599,9 @@ class OutputFormatter {
     });
 
     // Summary
-    const successful = results.filter((r) => r.success);
+    const successful = results.filter(r => r.success);
     if (successful.length > 0) {
-      const avgScore =
-        successful.reduce((sum, r) => sum + r.result.score, 0) /
-        successful.length;
+      const avgScore = successful.reduce((sum, r) => sum + r.result.score, 0) / successful.length;
       lines.push('## Summary');
       lines.push('');
       lines.push(`- **Total:** ${results.length}`);
@@ -685,4 +648,3 @@ class OutputFormatter {
 }
 
 module.exports = OutputFormatter;
-

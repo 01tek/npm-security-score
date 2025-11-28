@@ -169,7 +169,7 @@ class MaintainerSecurityRule extends BaseRule {
     const maintainers = [];
 
     if (packageData.maintainers && Array.isArray(packageData.maintainers)) {
-      packageData.maintainers.forEach((m) => {
+      packageData.maintainers.forEach(m => {
         if (typeof m === 'string') {
           maintainers.push({ name: m });
         } else if (m && m.name) {
@@ -323,4 +323,3 @@ class MaintainerSecurityRule extends BaseRule {
 }
 
 module.exports = MaintainerSecurityRule;
-

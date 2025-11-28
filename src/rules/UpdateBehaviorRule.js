@@ -47,7 +47,7 @@ class UpdateBehaviorRule extends BaseRule {
     try {
       // Fetch version history
       const versionHistory = await this._fetchVersionHistory(packageData.name);
-      
+
       if (!versionHistory || Object.keys(versionHistory).length < 2) {
         return {
           deduction: 0,
@@ -57,10 +57,7 @@ class UpdateBehaviorRule extends BaseRule {
       }
 
       // Analyze version changes
-      const analysis = await this._analyzeVersionChanges(
-        packageData,
-        versionHistory
-      );
+      const analysis = await this._analyzeVersionChanges(packageData, versionHistory);
 
       // Calculate risk and deduction
       const { deduction, riskLevel } = this._calculateRisk(analysis);
@@ -112,23 +109,27 @@ class UpdateBehaviorRule extends BaseRule {
     // Get recent versions to analyze (last N versions)
     const recentVersions = versions.slice(-this.maxVersionsToAnalyze);
     const currentIndex = recentVersions.indexOf(currentVersion);
-    
+
     // If current version is not in recent versions, analyze from the end
-    const versionsToAnalyze = currentIndex >= 0 
-      ? recentVersions.slice(0, currentIndex + 1)
-      : recentVersions.slice(-5); // Analyze last 5 if current not found
+    const versionsToAnalyze =
+      currentIndex >= 0 ? recentVersions.slice(0, currentIndex + 1) : recentVersions.slice(-5); // Analyze last 5 if current not found
 
     let previousVersion = null;
     let previousMetadata = null;
 
     for (const version of versionsToAnalyze) {
       const versionMetadata = versionHistory[version];
-      
+
       if (!versionMetadata) continue;
 
       if (previousVersion && previousMetadata) {
-        const changes = this._compareVersionMetadata(previousMetadata, versionMetadata, previousVersion, version);
-        
+        const changes = this._compareVersionMetadata(
+          previousMetadata,
+          versionMetadata,
+          previousVersion,
+          version
+        );
+
         if (changes.hasIssues) {
           findings.push({
             fromVersion: previousVersion,
@@ -146,13 +147,15 @@ class UpdateBehaviorRule extends BaseRule {
     // Check for unusual version jumps
     const versionJumps = this._detectVersionJumps(versions);
     if (versionJumps.length > 0) {
-      findings.push(...versionJumps.map(jump => ({
-        type: 'version-jump',
-        fromVersion: jump.from,
-        toVersion: jump.to,
-        jumpType: jump.type,
-        description: `Unusual version jump: ${jump.from} → ${jump.to} (${jump.type})`,
-      })));
+      findings.push(
+        ...versionJumps.map(jump => ({
+          type: 'version-jump',
+          fromVersion: jump.from,
+          toVersion: jump.to,
+          jumpType: jump.type,
+          description: `Unusual version jump: ${jump.from} → ${jump.to} (${jump.type})`,
+        }))
+      );
     }
 
     return {
@@ -178,10 +181,10 @@ class UpdateBehaviorRule extends BaseRule {
     // 1. Check size changes
     const prevSize = prevMetadata.dist?.unpackedSize || 0;
     const currSize = currMetadata.dist?.unpackedSize || 0;
-    
+
     if (prevSize > 0 && currSize > 0) {
       const sizeIncrease = (currSize - prevSize) / prevSize;
-      
+
       if (sizeIncrease > this.sizeIncreaseThreshold) {
         changes.sizeChange = {
           previous: prevSize,
@@ -198,7 +201,7 @@ class UpdateBehaviorRule extends BaseRule {
     // 2. Check script changes
     const prevScripts = PackageAnalyzer.extractLifecycleScripts(prevMetadata);
     const currScripts = PackageAnalyzer.extractLifecycleScripts(currMetadata);
-    
+
     const scriptChanges = this._detectScriptChanges(prevScripts, currScripts);
     if (scriptChanges.hasChanges) {
       changes.scriptChanges = scriptChanges;
@@ -208,7 +211,7 @@ class UpdateBehaviorRule extends BaseRule {
     // 3. Check dependency changes (significant additions)
     const prevDeps = PackageAnalyzer.extractDependencies(prevMetadata);
     const currDeps = PackageAnalyzer.extractDependencies(currMetadata);
-    
+
     const depChanges = this._detectDependencyChanges(prevDeps, currDeps);
     if (depChanges.hasSignificantChanges) {
       changes.dependencyChanges = depChanges;
@@ -270,7 +273,7 @@ class UpdateBehaviorRule extends BaseRule {
       if (currHooks.includes(hook)) {
         const prevScript = PackageAnalyzer.normalizeScript(prevScripts[hook]);
         const currScript = PackageAnalyzer.normalizeScript(currScripts[hook]);
-        
+
         if (prevScript !== currScript) {
           changes.modified.push({
             hook,
@@ -308,12 +311,17 @@ class UpdateBehaviorRule extends BaseRule {
     };
 
     // Check all dependency types
-    const depTypes = ['dependencies', 'devDependencies', 'peerDependencies', 'optionalDependencies'];
-    
+    const depTypes = [
+      'dependencies',
+      'devDependencies',
+      'peerDependencies',
+      'optionalDependencies',
+    ];
+
     for (const depType of depTypes) {
       const prev = prevDeps[depType] || {};
       const curr = currDeps[depType] || {};
-      
+
       const prevKeys = Object.keys(prev);
       const currKeys = Object.keys(curr);
 
@@ -356,14 +364,14 @@ class UpdateBehaviorRule extends BaseRule {
    */
   _detectVersionJumps(versions) {
     const jumps = [];
-    
+
     // Sort versions properly
     const sortedVersions = [...versions].sort((a, b) => this._compareVersionStrings(a, b));
-    
+
     for (let i = 1; i < sortedVersions.length; i++) {
       const prev = sortedVersions[i - 1];
       const curr = sortedVersions[i];
-      
+
       const jump = this._analyzeVersionJump(prev, curr);
       if (jump.isUnusual) {
         jumps.push({
@@ -418,10 +426,10 @@ class UpdateBehaviorRule extends BaseRule {
   _parseVersion(version) {
     // Remove leading 'v' if present
     const cleanVersion = version.replace(/^v/, '');
-    
+
     // Match semantic version pattern
     const match = cleanVersion.match(/^(\d+)\.(\d+)\.(\d+)(?:-(.+))?(?:\+(.+))?$/);
-    
+
     if (!match) {
       return null;
     }
@@ -569,4 +577,3 @@ class UpdateBehaviorRule extends BaseRule {
 }
 
 module.exports = UpdateBehaviorRule;
-

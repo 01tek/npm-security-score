@@ -9,11 +9,7 @@ const NpmRegistryClient = require('../api/NpmRegistryClient');
 
 class SignedReleasesRule extends BaseRule {
   constructor(bonus = 10, config = {}) {
-    super(
-      'signed-releases',
-      bonus,
-      'Checks if package releases are cryptographically signed'
-    );
+    super('signed-releases', bonus, 'Checks if package releases are cryptographically signed');
 
     this.bonus = bonus;
     this.npmClient = new NpmRegistryClient(config.npm || {});
@@ -79,7 +75,10 @@ class SignedReleasesRule extends BaseRule {
       if (Array.isArray(packageData.signatures) && packageData.signatures.length > 0) {
         return true;
       }
-      if (typeof packageData.signatures === 'object' && Object.keys(packageData.signatures).length > 0) {
+      if (
+        typeof packageData.signatures === 'object' &&
+        Object.keys(packageData.signatures).length > 0
+      ) {
         return true;
       }
     }
@@ -129,4 +128,3 @@ class SignedReleasesRule extends BaseRule {
 }
 
 module.exports = SignedReleasesRule;
-

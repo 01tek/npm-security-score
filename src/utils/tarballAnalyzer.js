@@ -70,11 +70,9 @@ class TarballAnalyzer {
       const isHttps = url.startsWith('https');
       const client = isHttps ? https : http;
 
-      const request = client.get(url, (response) => {
+      const request = client.get(url, response => {
         if (response.statusCode !== 200) {
-          reject(
-            new Error(`Failed to download tarball: HTTP ${response.statusCode}`)
-          );
+          reject(new Error(`Failed to download tarball: HTTP ${response.statusCode}`));
           return;
         }
 
@@ -86,13 +84,13 @@ class TarballAnalyzer {
           resolve();
         });
 
-        fileStream.on('error', (error) => {
+        fileStream.on('error', error => {
           rm(destPath, { force: true }).catch(() => {});
           reject(error);
         });
       });
 
-      request.on('error', (error) => {
+      request.on('error', error => {
         reject(error);
       });
 
@@ -182,9 +180,7 @@ class TarballAnalyzer {
     }
 
     // Sort largest files
-    analysis.largestFiles = analysis.largestFiles
-      .sort((a, b) => b.size - a.size)
-      .slice(0, 10);
+    analysis.largestFiles = analysis.largestFiles.sort((a, b) => b.size - a.size).slice(0, 10);
 
     return analysis;
   }
@@ -263,4 +259,3 @@ class TarballAnalyzer {
 }
 
 module.exports = TarballAnalyzer;
-

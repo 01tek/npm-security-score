@@ -88,9 +88,7 @@ class LifecycleScriptRiskRule extends BaseRule {
       };
     }
 
-    const lifecycleScripts = PackageAnalyzer.extractLifecycleScripts(
-      packageData
-    );
+    const lifecycleScripts = PackageAnalyzer.extractLifecycleScripts(packageData);
 
     if (Object.keys(lifecycleScripts).length === 0) {
       return {
@@ -233,4 +231,3 @@ class LifecycleScriptRiskRule extends BaseRule {
 }
 
 module.exports = LifecycleScriptRiskRule;
-

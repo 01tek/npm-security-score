@@ -250,10 +250,7 @@ class ExternalNetworkCallRule extends BaseRule {
       // Detect new XMLHttpRequest()
       NewExpression(path) {
         const { node } = path;
-        if (
-          node.callee.type === 'Identifier' &&
-          node.callee.name === 'XMLHttpRequest'
-        ) {
+        if (node.callee.type === 'Identifier' && node.callee.name === 'XMLHttpRequest') {
           findings.push({
             type: 'xhr-usage',
             description: 'XMLHttpRequest usage detected',
@@ -307,7 +304,7 @@ class ExternalNetworkCallRule extends BaseRule {
 
     for (const [depName, version] of Object.entries(allDeps)) {
       // Check if dependency name matches network modules
-      if (this.networkModules.some((module) => depName.includes(module))) {
+      if (this.networkModules.some(module => depName.includes(module))) {
         findings.push({
           type: 'network-dependency',
           package: depName,
@@ -322,4 +319,3 @@ class ExternalNetworkCallRule extends BaseRule {
 }
 
 module.exports = ExternalNetworkCallRule;
-

@@ -56,9 +56,7 @@ describe('CodeObfuscationRule', () => {
 
       const result = await rule.evaluate(packageData);
       expect(result.deduction).toBeGreaterThan(0);
-      expect(
-        result.details.findings.some((f) => f.type === 'large-package-size')
-      ).toBe(true);
+      expect(result.details.findings.some(f => f.type === 'large-package-size')).toBe(true);
     });
 
     it('should detect suspicious file patterns', async () => {
@@ -70,18 +68,14 @@ describe('CodeObfuscationRule', () => {
       };
 
       const result = await rule.evaluate(packageData);
-      expect(
-        result.details.findings.some((f) => f.type === 'suspicious-file-patterns')
-      ).toBe(true);
+      expect(result.details.findings.some(f => f.type === 'suspicious-file-patterns')).toBe(true);
     });
 
     it('should analyze tarball if available', async () => {
       const mockAnalyzer = {
         analyzeTarball: jest.fn().mockResolvedValue({
           hasPackageJson: true,
-          largestFiles: [
-            { path: 'dist/app.min.js', size: 6 * 1024 * 1024 },
-          ],
+          largestFiles: [{ path: 'dist/app.min.js', size: 6 * 1024 * 1024 }],
           totalFiles: 100,
         }),
       };
@@ -117,9 +111,7 @@ describe('CodeObfuscationRule', () => {
       };
 
       const result = await rule.evaluate(packageData);
-      expect(result.details.findings.some((f) => f.type === 'tarball-analysis-error')).toBe(
-        true
-      );
+      expect(result.details.findings.some(f => f.type === 'tarball-analysis-error')).toBe(true);
     });
 
     it('should calculate full deduction for high risk', async () => {
@@ -204,7 +196,7 @@ describe('CodeObfuscationRule', () => {
       // Use a mix of all ASCII characters for maximum entropy
       const highEntropyChars = [];
       for (let i = 0; i < 2000; i++) {
-        highEntropyChars.push(String.fromCharCode(32 + (i * 97) % 95));
+        highEntropyChars.push(String.fromCharCode(32 + ((i * 97) % 95)));
       }
       const obfuscatedCode = highEntropyChars.join('');
 
@@ -212,7 +204,7 @@ describe('CodeObfuscationRule', () => {
       // Check that entropy calculation works correctly
       const normalEntropy = rule._calculateEntropy(normalCode);
       const obfuscatedEntropy = rule._calculateEntropy(obfuscatedCode);
-      
+
       expect(normalEntropy).toBeLessThan(rule.entropyThreshold);
       // The obfuscated code should have higher entropy
       expect(obfuscatedEntropy).toBeGreaterThan(normalEntropy);
@@ -228,4 +220,3 @@ describe('CodeObfuscationRule', () => {
     });
   });
 });
-

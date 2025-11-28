@@ -62,4 +62,3 @@ class BaseRule {
 }
 
 module.exports = BaseRule;
-

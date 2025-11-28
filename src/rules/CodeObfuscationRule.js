@@ -10,11 +10,7 @@ const PackageAnalyzer = require('../utils/packageAnalyzer');
 
 class CodeObfuscationRule extends BaseRule {
   constructor(weight = 10, config = {}) {
-    super(
-      'code-obfuscation',
-      weight,
-      'Detects obfuscated, minified, and suspicious code patterns'
-    );
+    super('code-obfuscation', weight, 'Detects obfuscated, minified, and suspicious code patterns');
 
     this.maxMinifiedSize = config.maxMinifiedSize || 5 * 1024 * 1024; // 5MB default
     this.entropyThreshold = config.entropyThreshold || 7.5; // High entropy threshold
@@ -57,10 +53,7 @@ class CodeObfuscationRule extends BaseRule {
     const tarballUrl = packageData.dist?.tarball;
     if (tarballUrl) {
       try {
-        const tarballFindings = await this._analyzeTarball(
-          tarballUrl,
-          packageData.name
-        );
+        const tarballFindings = await this._analyzeTarball(tarballUrl, packageData.name);
         findings.push(...tarballFindings);
         totalRisk += tarballFindings.length;
       } catch (error) {
@@ -183,7 +176,7 @@ class CodeObfuscationRule extends BaseRule {
       /\.pack\.js$/i,
     ];
 
-    return minifiedPatterns.some((pattern) => pattern.test(filePath));
+    return minifiedPatterns.some(pattern => pattern.test(filePath));
   }
 
   /**
@@ -220,7 +213,7 @@ class CodeObfuscationRule extends BaseRule {
       /packed/i,
     ];
 
-    return suspiciousPatterns.some((pattern) => pattern.test(fileName));
+    return suspiciousPatterns.some(pattern => pattern.test(fileName));
   }
 
   /**
@@ -273,4 +266,3 @@ class CodeObfuscationRule extends BaseRule {
 }
 
 module.exports = CodeObfuscationRule;
-

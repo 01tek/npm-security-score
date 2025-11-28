@@ -94,4 +94,3 @@ class ScoreCalculator {
 }
 
 module.exports = ScoreCalculator;
-

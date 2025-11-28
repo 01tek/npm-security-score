@@ -98,7 +98,7 @@ describe('UpdateBehaviorRule', () => {
 
       expect(result.deduction).toBeGreaterThan(0);
       expect(result.details.analysis.findings.length).toBeGreaterThan(0);
-      
+
       const finding = result.details.analysis.findings[0];
       expect(finding.changes.sizeChange).toBeDefined();
       expect(finding.changes.sizeChange.increasePercent).toBeGreaterThanOrEqual(50);
@@ -137,7 +137,7 @@ describe('UpdateBehaviorRule', () => {
 
       expect(result.deduction).toBeGreaterThan(0);
       expect(result.riskLevel).toBe('high');
-      
+
       const finding = result.details.analysis.findings[0];
       expect(finding.changes.scriptChanges.newSuspiciousScripts.length).toBeGreaterThan(0);
     });
@@ -437,4 +437,3 @@ describe('UpdateBehaviorRule', () => {
     });
   });
 });
-
