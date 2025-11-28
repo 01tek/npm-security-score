@@ -1,5 +1,9 @@
 # npm-security-score 🔒
 
+![Security Score](https://img.shields.io/badge/security_score-100%2F100-brightgreen?style=flat-square)
+![Status](https://img.shields.io/badge/status-safe-brightgreen?style=flat-square)
+![Version](https://img.shields.io/badge/version-0.1.0-blue?style=flat-square)
+
 > **World-Class Security Standard for npm Packages**
 
 The npm ecosystem is the Wild West of software supply chains. This project aims to establish a world-class security standard that stops malicious actors and protects developers worldwide.

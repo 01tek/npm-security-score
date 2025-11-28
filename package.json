@@ -19,6 +19,8 @@
     "format:check": "prettier --check 'src/**/*.js' 'tests/**/*.js'",
     "audit": "npm audit",
     "audit:fix": "npm audit fix",
+    "score-self": "node score-local.js",
+    "badge": "node scripts/generate-badge.js",
     "prepare": "husky"
   },
   "keywords": [
